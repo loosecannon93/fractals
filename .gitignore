@@ -1,0 +1,7 @@
+ply-read-only/
+ply-svn/
+*.o
+lex.yy.c
+a.out
+*.tab.*
+*.gch
