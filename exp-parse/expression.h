@@ -1,52 +1,119 @@
 #include <complex.h> 
 
-union expression_t; typedef union expression_t expression_t; 
-union term_t;  typedef union term_t term_t; 
- union factor_t ;typedef union factor_t factor_t; 
-union exponential_t; typedef union exponential_t exponential_t; 
+struct expression_t; typedef struct expression_t expression_t; 
+struct term_t;  typedef struct term_t term_t; 
+ struct factor_t ;typedef struct factor_t factor_t; 
+struct exponential_t; typedef struct exponential_t exponential_t; 
 
-typedef union expression_t { 
-    term_t *term; 
-    struct { 
-        expression_t *expression;
-        term_t *term ;
-    } plus;
-    struct { 
-        expression_t *expression ;
+enum EXP_TYPE { TERM, PLUS, MINUS , // expression types 
+                FACTOR, TIMES, DIVIDED_BY ,  //term types
+                EXPONENTIAL , RAISED_TO , // facor types 
+                NUMBER, VARIABLE, EXPRESSION, // exponential types  
+                UNDEFINED } ; //type not yet set 
+
+
+typedef struct expression_t {
+    enum EXP_TYPE type;  
+    union { 
         term_t *term; 
-    } minus; 
+        struct plus { 
+            expression_t *expression;
+            term_t *term ;
+        } plus;
+        struct minus { 
+            expression_t *expression ;
+            term_t *term; 
+        } minus; 
+    } data;
 } expression_t;  
 
-typedef union term_t { 
-    factor_t *factor; 
-    struct { 
-        term_t *term; 
+typedef struct term_t { 
+    enum EXP_TYPE type;  
+    union { 
         factor_t *factor; 
-    } times; 
-    struct { 
-        term_t *term;
-        factor_t *factor;
-    } divided_by; 
+        struct times { 
+            term_t *term; 
+            factor_t *factor; 
+        } times; 
+        struct divided_by { 
+            term_t *term;
+            factor_t *factor;
+        } divided_by; 
+    } data; 
 } term_t; 
 
-typedef union factor_t { 
-    exponential_t *exponential; 
-    struct { 
-        exponential_t *base; 
-        exponential_t *pow; 
-    } raised_to; 
+typedef struct factor_t { 
+    enum EXP_TYPE type;  
+    union { 
+        exponential_t *exponential; 
+        struct raised_to { 
+            exponential_t *base; 
+            exponential_t *pow; 
+        } raised_to; 
+    } data; 
 } factor_t; 
 
-typedef union exponential_t { 
-    complex number;
-    struct { 
-       char letter; 
-       complex value; 
-    } variable;  
-    expression_t *expression; 
+typedef struct exponential_t { 
+    enum EXP_TYPE type;  
+    union { 
+        complex number;
+        struct variable { 
+           char letter; 
+           complex value; 
+        } variable;  
+        expression_t *expression; 
+    } data; 
 } exponential_t;
+// setter functions, set the type when updated 
+void expression_set_term(expression_t *e, term_t *t ) ;
+void expression_set_plus(expression_t *e,  expression_t *a, term_t *b)  ;
+void expression_set_minus(expression_t *e, expression_t *a, term_t *b);
+
+void term_set_factor(term_t *t , factor_t *f) ; 
+void term_set_times(term_t  *t, term_t *a , factor_t *b ); 
+void term_set_divided_by(term_t *t , term_t *divedend, factor_t *divisor); 
+
+void factor_set_exponential(factor_t *f , exponential_t *exp); 
+void factor_set_raised_to(factor_t *f, exponential_t *base, exponential_t *power  ) ; 
+
+void exponential_set_number( exponential_t *e , complex abi ) ; 
+void exponential_set_variable( exponential_t *e , const char name, complex value ) ; 
+void exponential_set_expresion( exponential_t *e , expression_t *expr ) ; 
+
+// getters, check the type and Exit if we do anything with the wrong type 
+void *expression_get_term(expression_t *e) ;
+struct plus *expression_get_plus(expression_t *e); 
+struct minus *expression_get_minus(expression_t *e);
+
+factor_t *term_get_factor(term_t *t ) ; 
+struct times *term_get_times(term_t  *t); 
+struct divided_by *term_get_divided_by(term_t *t ); 
+
+exponential_t *factor_get_exponential(factor_t *f ) ;
+struct raised_to *factor_get_raised_to(factor_t *f ) ; 
+
+complex *exponential_get_number( exponential_t *e  ) ; 
+struct variable *exponential_get_variable( exponential_t *e ) ; 
+expression_t *exponential_get_expresion( exponential_t *e ) ; 
 
 
-complex eval_exponential( exponential_t , complex
+// evaluate our exquation 
+complex eval_exponential( exponential_t exp, complex z ); 
+complex eval_factor( factor_t factor , complex z ) ; 
+complex eval_term( term_t term, complex z ) ; 
 complex eval_expression( expression_t expr, complex z ); 
+
+// allocate and free
+expression_t *new_expression(void) ; 
+void free_expression(expression_t *e) ; 
+
+term_t new_term(void); 
+void free_term(term_t *t) ; 
+
+factor_t new_factor(void); 
+void free_factor(factor_t *f) ; 
+
+exponential_t new_exponential(void); 
+void free_exponential(exponential_t *e) ; 
+
 
