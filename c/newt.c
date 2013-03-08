@@ -5,6 +5,7 @@
 #include <complex.h>
 #include <float.h>
 #include <math.h> 
+#include <string.h> 
 
 #include "expression.h" 
 #include "expression_parse.tab.h" 
@@ -37,18 +38,19 @@ int main(int argc, char **argv) {
     expressions = new_expression_list(); 
     yyparse(); 
     expression_t *expression =  expression_list_pop(expressions);
-    printf(" expression is at %p \n" , expression ) ; 
+
     int filenum= 0 ; 
     while( expression  != NULL ) { 
-        char *filename ; 
-        asprintf(&filename, "fractal-%3d.ppm", filenum ) ; 
+        char *template = strdup("XXXXXX") ; 
+        template = mktemp(template); 
+        char *filename; 
+        asprintf(&filename,"img/fractal-%s.ppm", template) ; 
         puts(filename) ; 
         drawFractal(filename, expression) ;
         free((void*) filename) ;
         free_expression(expression); 
 
         expression = expression_list_pop(expressions) ; 
-        filenum++; 
     }
     free_expression_list(expressions ) ;
     exit(0); 
@@ -56,7 +58,6 @@ int main(int argc, char **argv) {
 }
 
 void drawFractal(char *filename, expression_t *expr) { 
-    fprintf(stderr,"printing fractal" ) ;
     FILE *image = fopen(filename, "w") ; 
     fprintf(image, "P3\n"); // color pixmap, ASCII
     fprintf(image, "%d %d\n" , WIDTH , HEIGHT ) ; 

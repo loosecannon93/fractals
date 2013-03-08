@@ -46,10 +46,9 @@ lines
 line 
     : expression EOLN_TOK           { 
         expression_list_push(expressions , $1 ) ;      
-        fprintf(stderr, "pushed expression" ) ; 
     } 
     | ERROR_TOK EOLN_TOK                { printf("error\n"); } 
-    | EOLN_TOK                      { printf("err\n");} 
+    | EOLN_TOK                      
     ;
 
 expression
