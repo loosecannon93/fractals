@@ -208,6 +208,11 @@ complex eval_exponential( exponential_t *exp, complex z ){
         { 
             //could add support for multiple variables, idk why though, would be fun to learn variadic functions  
             return z; 
+        }
+        case EXPRESSION: 
+        { 
+            expression_t *expression = exponential_get_expression(exp); 
+            return eval_expression(expression, z) ;
         } 
         default: 
             fprintf(stderr, "exponential of noninitialized type . Aborting. \n" ) ; 
