@@ -193,7 +193,7 @@ complex eval_factor( factor_t *factor , complex z ) {
             return cpow(base, pow ); //complex power 
         }
         default: 
-            fprintf(stderr, "term of noninitialized type . Aborting. \n" ) ; 
+            fprintf(stderr, "factor of noninitialized type . Aborting. \n" ) ; 
             exit(3) ; 
     }
 }
@@ -210,7 +210,7 @@ complex eval_exponential( exponential_t *exp, complex z ){
             return z; 
         } 
         default: 
-            fprintf(stderr, "term of noninitialized type . Aborting. \n" ) ; 
+            fprintf(stderr, "exponential of noninitialized type . Aborting. \n" ) ; 
             exit(3) ; 
     }
 }
