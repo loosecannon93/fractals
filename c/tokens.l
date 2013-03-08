@@ -12,13 +12,14 @@ int yyparse();
 
 %option noyywrap
 
-element [[:upper:]][[:lower:]]{0,2}
 
 %%
 
 z|Z                                   {   return Z_TOK;            } 
 
 i|I                                   {  return J_TOK; } 
+
+#.*\n                                 { return COMMENT_TOK; } 
 
 [0-9]*\.?[0-9]+([eE][-+]?[0-9]+)? {   
                                             yylval.num = atof(yytext); 
