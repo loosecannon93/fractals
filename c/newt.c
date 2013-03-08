@@ -62,6 +62,9 @@ void drawFractal(char *filename, expression_t *expr) {
     fprintf(image, "P3\n"); // color pixmap, ASCII
     fprintf(image, "%d %d\n" , WIDTH , HEIGHT ) ; 
     fprintf(image, "%d\n", 255) ; // 255 = max value for color
+    fprintf(image, "#") ; 
+    print_expression(expr,image) ; 
+    fprintf(image, "\n" ) ; 
     // end PPM file header // 
 
     for ( int y = 0 ; y < HEIGHT ; ++y) { // for every row of pixels 
