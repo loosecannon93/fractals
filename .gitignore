@@ -5,3 +5,6 @@ lex.yy.c
 a.out
 *.tab.*
 *.gch
+*.ppm
+newt
+newt.cs.uchicago
