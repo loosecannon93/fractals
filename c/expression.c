@@ -405,118 +405,96 @@ void type_error(char *expected_name , int expected_value, int actual_value ) {
     exit(2) ; 
 }
 
-void print_expression(expression_t *expr ) { 
-    printf("(E:  " ) ; 
+void print_expression(expression_t *expr, FILE *out ) { 
     switch(expr->type ) { 
         case TERM: 
-            printf("(" );
-            print_term(expression_get_term(expr) ); 
-            printf(")") ; 
+            print_term(expression_get_term(expr) ,out); 
             break; 
         case PLUS: 
         {
             struct plus *plus = expression_get_plus(expr) ; 
-            printf("("); 
-            print_expression(plus->expression); 
-            printf("+"); 
-            print_term(plus->term) ; 
-            printf(")");
+            print_expression(plus->expression,out); 
+            fprintf(out,"+"); 
+            print_term(plus->term,out) ; 
             break;
         }
         case MINUS: 
         {
             struct minus *minus = expression_get_minus(expr) ; 
-            printf("("); 
-            print_expression(minus->expression); 
-            printf("-"); 
-            print_term(minus->term) ; 
-            printf(")");
+            print_expression(minus->expression,out); 
+            fprintf(out,"-"); 
+            print_term(minus->term,out) ; 
             break;
         }
         default: 
-            printf("?expr type unknowm?"); 
+            fprintf(out,"?expr type unknowm?"); 
             break; 
     }
-    printf(")"); 
 } 
-void print_term(term_t *term ) { 
-    printf("(T:" ) ; 
+void print_term(term_t *term ,FILE *out) { 
     switch (term->type) { 
         case FACTOR: 
-        printf("(") ; 
-        print_factor(term_get_factor(term)) ; 
-        printf(")"); 
+        print_factor(term_get_factor(term),out) ; 
         break;
         case TIMES: 
         {
             struct times *times = term_get_times(term); 
-            printf("(");
-            print_term(times->term) ; 
-            printf("*");
-            print_factor(times->factor) ; 
-            printf(")"); 
+            print_term(times->term,out) ; 
+            fprintf(out,"*");
+            print_factor(times->factor,out) ; 
             break;
         }
         case DIVIDED_BY : 
         { 
             struct divided_by *div = term_get_divided_by(term); 
-            printf("("); 
-            print_term(div->term) ; 
-            printf("/");
-            print_factor(div->factor) ; 
-            printf(")"); 
+            print_term(div->term,out) ; 
+            fprintf(out,"/");
+            print_factor(div->factor,out) ; 
             break;
         }
         default : 
-            printf("?term type unknown?"); 
+            fprintf(out,"?term type unknown?"); 
             break; 
     }
-    printf(")"); 
 }
-void print_factor(factor_t *factor ) { 
-    printf("(F:" ) ; 
+void print_factor(factor_t *factor , FILE *out) { 
     switch (factor->type) { 
         case EXPONENTIAL: 
-        printf("(") ; 
-        print_exponential(factor_get_exponential(factor)) ; 
-        printf(")"); 
+        print_exponential(factor_get_exponential(factor),out) ; 
         break;
         case RAISED_TO: 
         {
             struct raised_to *raised_to = factor_get_raised_to(factor); 
-            printf("(");
-            print_exponential(raised_to->base)  ; 
-            printf("^");
-            print_exponential(raised_to->pow) ; 
-            printf(")"); 
+            print_exponential(raised_to->base,out)  ; 
+            fprintf(out,"^");
+            fprintf(out,"(");
+            print_exponential(raised_to->pow,out) ; 
+            fprintf(out,")"); 
             break;
         }
         default : 
-            printf("?factor type unknown?"); 
+            fprintf(out,"?factor type unknown?"); 
             break; 
     }
-    printf(")"); 
 }
-void print_exponential(exponential_t *exp) { 
-    printf("(EXP:" );
+void print_exponential(exponential_t *exp, FILE *out ) { 
     switch(exp->type) { 
         case NUMBER: 
         {
             complex num = exponential_get_number(exp) ;
-            printf("%f + %fi", creal(num) , cimag(num ) ) ; 
+            fprintf(out,"(%1.1f+%1.1fi)", creal(num) , cimag(num ) ) ; 
             break;
         } 
         case VARIABLE: 
-            putchar(exponential_get_variable(exp)) ; 
+            fputc(exponential_get_variable(exp), out) ; 
             break; 
         case EXPRESSION: 
-            print_expression(exponential_get_expression(exp)) ; 
+            print_expression(exponential_get_expression(exp),out) ; 
             break; 
         default:
-            printf("?exponential type unknown?" ) ; 
+            fprintf(out,"?exponential type unknown?" ) ; 
             break;
     }
-    printf("("); 
 } 
 
 

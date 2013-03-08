@@ -139,9 +139,9 @@ expression_t *expression_list_pop(expression_list* list) ;
 
 void type_error(char *expected_name, int expected_value, int actual_value ) ; 
 
-void print_expression(expression_t *expression);
-void print_term(term_t *term);
-void print_factor(factor_t *factor);
-void print_exponential(exponential_t *exponential);
+void print_expression(expression_t *expression, FILE *out);
+void print_term(term_t *term, FILE *out);
+void print_factor(factor_t *factor, FILE *out);
+void print_exponential(exponential_t *exponential, FILE *out);
 
 #endif // EXPRESSION_H 
