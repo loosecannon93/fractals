@@ -60,7 +60,7 @@ void exponential_set_variable( exponential_t *e , const char name ) {
     e->type = VARIABLE; 
     e->data.variable = name ; 
 } 
-void exponential_set_expresion( exponential_t *e , expression_t *expr ) { 
+void exponential_set_expression( exponential_t *e , expression_t *expr ) { 
     e->type = EXPRESSION; 
     e->data.expression = expr; 
 } 
@@ -121,7 +121,7 @@ char exponential_get_variable( exponential_t *e ) {
     if ( e->type != VARIABLE ) {  type_error("VARIABLE", VARIABLE, e->type ) ; } 
     return e->data.variable;
 } 
-expression_t *exponential_get_expresion( exponential_t *e ) {
+expression_t *exponential_get_expression( exponential_t *e ) {
     if ( e->type != EXPRESSION ) {  type_error("EXPRESSION", EXPRESSION, e->type ) ; } 
     return (e->data.expression ) ; 
 } 
@@ -338,7 +338,7 @@ expression_list *new_expression_list(void) {
 
     return result; 
 } 
-void free_expresion_list(expression_list *list ) { 
+void free_expression_list(expression_list *list ) { 
     expression_list_node *node = list->start; 
     while(node != NULL ) { 
         expression_list_node *temp_node = node; 
@@ -367,16 +367,23 @@ expression_list_node *new_expression_list_node() {
 // list operations 
 
 void expression_list_push(expression_list *list, expression_t *expr) { 
-    expression_list_node *node = list->start; 
-    while(node->next != NULL )  { 
-        node = node->next; 
-    } 
-    node->next = new_expression_list_node(); 
-    node->next->contents = expr; 
+    if ( list->start == NULL ) { // initialize if empty 
+        list->start = new_expression_list_node();  
+        list->start->contents = expr ; 
+        return ; 
+    } else {        
+        expression_list_node *node = list->start; 
+        while(node->next != NULL )  { 
+            node = node->next; 
+        } 
+        node->next = new_expression_list_node(); 
+        node->next->contents = expr; 
+    }
 } 
 expression_t *expression_list_pop(expression_list *list) { 
     // pop from front of queue make it a FIFO
-    if ( list->start == NULL ) { fprintf(stderr, "Cannot pop from empty list\n" ) ; exit(5); } 
+    if ( list->start == NULL ) { return NULL ;  fprintf(stderr, "Cannot pop from empty list\n" ) ;/* exit(5);*/ } 
+
     expression_t *expr = list->start->contents ;
     expression_list_node *new_start = list->start->next;
     free((void*)list->start) ;

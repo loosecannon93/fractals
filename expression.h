@@ -1,3 +1,6 @@
+#ifndef EXPRESSION_H 
+#define EXPRESSION_H 
+
 #include <complex.h> 
 
 struct expression_t; typedef struct expression_t expression_t; 
@@ -85,7 +88,7 @@ void factor_set_raised_to(factor_t *f, exponential_t *base, exponential_t *power
 
 void exponential_set_number( exponential_t *e , complex abi ) ; 
 void exponential_set_variable( exponential_t *e , const char name/*, complex value*/ ) ; 
-void exponential_set_expresion( exponential_t *e , expression_t *expr ) ; 
+void exponential_set_expression( exponential_t *e , expression_t *expr ) ; 
 
 // getters, check the type and Exit if we do anything with the wrong type 
 term_t *expression_get_term(expression_t *e) ;
@@ -101,7 +104,7 @@ struct raised_to *factor_get_raised_to(factor_t *f ) ;
 
 complex exponential_get_number( exponential_t *e  ) ; 
 char exponential_get_variable( exponential_t *e ) ; 
-expression_t *exponential_get_expresion( exponential_t *e ) ; 
+expression_t *exponential_get_expression( exponential_t *e ) ; 
 
 
 // evaluate our exquation 
@@ -135,3 +138,6 @@ expression_t *expression_list_pop(expression_list* list) ;
 
 
 void type_error(char *expected_name, int expected_value, int actual_value ) ; 
+
+
+#endif // EXPRESSION_H 
