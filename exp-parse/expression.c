@@ -56,10 +56,9 @@ void exponential_set_number( exponential_t *e , complex abi ) {
     e->type = NUMBER; 
     e->data.number = abi; 
 } 
-void exponential_set_variable( exponential_t *e , const char name, complex value ) {
+void exponential_set_variable( exponential_t *e , const char name ) {
     e->type = VARIABLE; 
-    e->data.variable.letter = name ; 
-    e->data.variable.value = value; 
+    e->data.variable = name ; 
 } 
 void exponential_set_expresion( exponential_t *e , expression_t *expr ) { 
     e->type = EXPRESSION; 
@@ -118,9 +117,9 @@ complex exponential_get_number( exponential_t *e  ) {
     if ( e->type != NUMBER ) {  type_error("NUMBER", NUMBER, e->type ) ; } 
     return (e->data.number ); 
 }
-struct variable *exponential_get_variable( exponential_t *e ) { 
+char exponential_get_variable( exponential_t *e ) { 
     if ( e->type != VARIABLE ) {  type_error("VARIABLE", VARIABLE, e->type ) ; } 
-    return &(e->data.variable);
+    return e->data.variable;
 } 
 expression_t *exponential_get_expresion( exponential_t *e ) {
     if ( e->type != EXPRESSION ) {  type_error("EXPRESSION", EXPRESSION, e->type ) ; } 
@@ -207,7 +206,7 @@ complex eval_exponential( exponential_t *exp, complex z ){
         }
         case VARIABLE: 
         { 
-            //could add support for multiple variables, idk why though 
+            //could add support for multiple variables, idk why though, would be fun to learn variadic functions  
             return z; 
         } 
         default: 
@@ -317,7 +316,7 @@ void free_factor(factor_t *factor) {
 
 exponential_t *new_exponential(void) { 
     exponential_t *result = (exponential_t*) malloc(sizeof(exponential_t)) ; 
-    if(result == NULL ) { fprintf(stderr, "Mem Error allocating factor\n" ) ; exit(4); } 
+    if(result == NULL ) { fprintf(stderr, "Mem Error allocating exponential\n" ) ; exit(4); } 
 
     result->type  = UNDEFINED; 
 
@@ -330,9 +329,62 @@ void free_exponential(exponential_t *e) {
     }
     free((void* ) e) ; 
 } 
+
+expression_list *new_expression_list(void) { 
+    expression_list *result = (expression_list*) malloc(sizeof(expression_list)) ;
+    if(result == NULL ) { fprintf(stderr, "Mem Error allocating list \n" ) ; exit(4); } 
+
+    result->start = NULL; 
+
+    return result; 
+} 
+void free_expresion_list(expression_list *list ) { 
+    expression_list_node *node = list->start; 
+    while(node != NULL ) { 
+        expression_list_node *temp_node = node; 
+        free_expression(node->contents); 
+        node = node->next;
+        free((void*)temp_node); 
+    } 
+    free((void*) list ) ; 
+    list = NULL ;
+}
+expression_list_node *new_expression_list_node() { 
+    expression_list_node *result = malloc(sizeof(expression_list_node)); 
+    if(result == NULL ) { fprintf(stderr, "Mem Error allocating list_node \n" ) ; exit(4); } 
+
+    result->contents = NULL ; 
+    result->next = NULL ; 
+
+    return result; 
+} 
+
+
 ///////////////////////////////////////////////////////
 //////////////// END ALLOC ///////////////////////////
 /////////////////////////////////////////////////////
+
+// list operations 
+
+void expression_list_push(expression_list *list, expression_t *expr) { 
+    expression_list_node *node = list->start; 
+    while(node->next != NULL )  { 
+        node = node->next; 
+    } 
+    node->next = new_expression_list_node(); 
+    node->next->contents = expr; 
+} 
+expression_t *expression_list_pop(expression_list *list) { 
+    // pop from front of queue make it a FIFO
+    if ( list->start == NULL ) { fprintf(stderr, "Cannot pop from empty list\n" ) ; exit(5); } 
+    expression_t *expr = list->start->contents ;
+    expression_list_node *new_start = list->start->next;
+    free((void*)list->start) ;
+    list->start = new_start;
+    return expr; 
+} 
+
+
 
 
 /////// ERROR HANDLING ////////

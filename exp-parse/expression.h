@@ -57,14 +57,21 @@ typedef struct exponential_t {
     enum EXP_TYPE type;  
     union { 
         complex number;
-        struct variable { 
-           char letter; 
-           complex value; 
-        } variable;  
+        char variable;  
         expression_t *expression; 
     } data; 
 } exponential_t;
-// setter functions, set the type when updated 
+
+//linked list of exprssions 
+typedef struct expression_list_node { 
+    expression_t *contents; 
+    struct expression_list_node *next; 
+} expression_list_node ; 
+typedef struct expression_list { 
+    expression_list_node *start; 
+} expression_list;
+
+// setter functions, set the type when updated
 void expression_set_term(expression_t *e, term_t *t ) ;
 void expression_set_plus(expression_t *e,  expression_t *a, term_t *b)  ;
 void expression_set_minus(expression_t *e, expression_t *a, term_t *b);
@@ -77,7 +84,7 @@ void factor_set_exponential(factor_t *f , exponential_t *exp);
 void factor_set_raised_to(factor_t *f, exponential_t *base, exponential_t *power  ) ; 
 
 void exponential_set_number( exponential_t *e , complex abi ) ; 
-void exponential_set_variable( exponential_t *e , const char name, complex value ) ; 
+void exponential_set_variable( exponential_t *e , const char name/*, complex value*/ ) ; 
 void exponential_set_expresion( exponential_t *e , expression_t *expr ) ; 
 
 // getters, check the type and Exit if we do anything with the wrong type 
@@ -93,7 +100,7 @@ exponential_t *factor_get_exponential(factor_t *f ) ;
 struct raised_to *factor_get_raised_to(factor_t *f ) ; 
 
 complex exponential_get_number( exponential_t *e  ) ; 
-struct variable *exponential_get_variable( exponential_t *e ) ; 
+char exponential_get_variable( exponential_t *e ) ; 
 expression_t *exponential_get_expresion( exponential_t *e ) ; 
 
 
@@ -115,6 +122,16 @@ void free_factor(factor_t *f) ;
 
 exponential_t *new_exponential(void); 
 void free_exponential(exponential_t *e) ; 
+
+expression_list_node *new_expression_list_node(void); 
+// freed by overlaying list 
+
+expression_list *new_expression_list(void); 
+void free_expression_list(expression_list *list) ; 
+
+// list operations
+void expression_list_push(expression_list *list, expression_t *expr ) ; 
+expression_t *expression_list_pop(expression_list* list) ; 
 
 
 void type_error(char *expected_name, int expected_value, int actual_value ) ; 
