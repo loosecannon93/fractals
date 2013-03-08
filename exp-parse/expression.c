@@ -1,3 +1,5 @@
+#include <stdio.h> 
+#include <stdlib.h> 
 #include <complex.h> 
 #include "expression.h" 
 
@@ -66,41 +68,276 @@ void exponential_set_expresion( exponential_t *e , expression_t *expr ) {
 ///////////////////////////////////////////////////////////
 ///////////// END SETTERS /////////////////////////////////
 //////////////////////////////////////////////////////////
-/*
-// getters, check the type and Exit if we do anything with the wrong type 
-void *expression_get_term(expression_t *e) ;
-struct plus *expression_get_plus(expression_t *e); 
-struct minus *expression_get_minus(expression_t *e);
 
-factor_t *term_get_factor(term_t *t ) ; 
-struct times *term_get_times(term_t  *t); 
-struct divided_by *term_get_divided_by(term_t *t ); 
+///////////////////////////////////////////////////////////
+///////////////////////// GETTERS /////////////////////////
+////// getters, check the type and return the value ///////
+///////Exit if we do anything with the wrong type /////////
+///////////////////////////////////////////////////////////
 
-exponential_t *factor_get_exponential(factor_t *f ) ;
-struct raised_to *factor_get_raised_to(factor_t *f ) ; 
+// expression getters 
+term_t *expression_get_term(expression_t *e) { 
+    if ( e->type != TERM ) { type_error("TERM", TERM, e->type ) ; } 
+    return (e->data.term); 
+}
+struct plus *expression_get_plus(expression_t *e) { 
+    if ( e->type != PLUS ) { type_error("PLUS", PLUS, e->type ) ; } 
+    return &(e->data.plus); 
+} 
+struct minus *expression_get_minus(expression_t *e) { 
+    if ( e->type != MINUS ) { type_error("MINUS", MINUS, e->type ) ; } 
+    return &(e->data.minus); 
+} 
 
-complex *exponential_get_number( exponential_t *e  ) ; 
-struct variable *exponential_get_variable( exponential_t *e ) ; 
-expression_t *exponential_get_expresion( exponential_t *e ) ; 
+// term getters 
+factor_t *term_get_factor(term_t *t ) { 
+    if ( t->type != FACTOR ) { type_error("FACTOR", FACTOR, t->type ) ; } 
+    return (t->data.factor); 
+} 
+struct times *term_get_times(term_t  *t) { 
+    if ( t->type != TIMES ) { type_error("TIMES", TIMES, t->type ) ; } 
+    return &(t->data.times); 
+}
+struct divided_by *term_get_divided_by(term_t *t )  {
+    if ( t->type != DIVIDED_BY ) { type_error("DIVIDED_BY", DIVIDED_BY, t->type ) ; } 
+    return &(t->data.divided_by); 
+}
 
+// factor getters
+exponential_t *factor_get_exponential(factor_t *f ) { 
+    if ( f->type != EXPONENTIAL ) { type_error("EXPONENTIAL", EXPONENTIAL, f->type ) ; } 
+    return (f->data.exponential) ; 
+} 
+struct raised_to *factor_get_raised_to(factor_t *f ) { 
+    if ( f->type != RAISED_TO ) { type_error("RAISED_TO", RAISED_TO, f->type ) ; } 
+    return &(f->data.raised_to) ;  
+} 
+
+// exponential getters
+complex exponential_get_number( exponential_t *e  ) { 
+    if ( e->type != NUMBER ) {  type_error("NUMBER", NUMBER, e->type ) ; } 
+    return (e->data.number ); 
+}
+struct variable *exponential_get_variable( exponential_t *e ) { 
+    if ( e->type != VARIABLE ) {  type_error("VARIABLE", VARIABLE, e->type ) ; } 
+    return &(e->data.variable);
+} 
+expression_t *exponential_get_expresion( exponential_t *e ) {
+    if ( e->type != EXPRESSION ) {  type_error("EXPRESSION", EXPRESSION, e->type ) ; } 
+    return (e->data.expression ) ; 
+} 
+//////////////////////////////////////////////////////////////////////////////////////
+/////////////////END GETTERS /////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////
+///////////// EVALUATION //////////////////////////////////////
+//////////////////////////////////////////////////////////////
 
 // evaluate our exquation 
-complex eval_exponential( exponential_t exp, complex z ); 
-complex eval_factor( factor_t factor , complex z ) ; 
-complex eval_term( term_t term, complex z ) ; 
-complex eval_expression( expression_t expr, complex z ); 
+complex eval_expression( expression_t *expr, complex z ) { 
+    switch(expr->type) { 
+        case TERM: 
+        {
+            term_t *term = expression_get_term(expr); 
+            return eval_term(term, z);break; 
+        }
+        case PLUS: 
+        { 
+            struct plus *plus = expression_get_plus(expr); 
+            return eval_expression(plus->expression,z) + eval_term(plus->term,z); break; 
+        } 
+        case MINUS:  
+        { 
+            struct minus *minus = expression_get_minus(expr) ; 
+            return eval_expression(minus->expression,z) - eval_term(minus->term,z ) ; break ; 
+        }
+        default: 
+            fprintf(stderr, "expression of noninitialized type . Aborting. \n" ) ; 
+            exit(3) ; 
+    }
+}
+complex eval_term( term_t *term, complex z ) { 
+    switch(term->type) { 
+        case FACTOR: 
+        {
+            factor_t *factor = term_get_factor(term); 
+            return eval_factor(factor, z) ; break ; 
+        }
+        case TIMES: 
+        { 
+            struct times *times = term_get_times(term) ; 
+            return eval_term(times->term,z) * eval_factor(times->factor,z) ; 
+        }
+        case DIVIDED_BY: 
+        {
+            struct divided_by *divided_by = term_get_divided_by(term); 
+            return eval_term(divided_by->term,z) / eval_factor(divided_by->factor,z) ; 
+        }
+        default: 
+            fprintf(stderr, "term of noninitialized type . Aborting. \n" ) ; 
+            exit(3) ; 
+    } 
+}
+complex eval_factor( factor_t *factor , complex z ) { 
+    switch(factor->type) { 
+        case EXPONENTIAL: 
+        { 
+            exponential_t *exponential = factor_get_exponential(factor); 
+            return eval_exponential(exponential,z) ;
+        } 
+        case RAISED_TO : 
+        { 
+            struct raised_to *raised_to = factor_get_raised_to(factor) ; 
+            complex base = eval_exponential(raised_to->base, z) ; 
+            complex pow = eval_exponential(raised_to->pow, z) ; 
+            return cpow(base, pow ); //complex power 
+        }
+        default: 
+            fprintf(stderr, "term of noninitialized type . Aborting. \n" ) ; 
+            exit(3) ; 
+    }
+}
+complex eval_exponential( exponential_t *exp, complex z ){ 
+    switch(exp->type) { 
+        case NUMBER: 
+        {
+            complex num = exponential_get_number(exp) ; 
+            return num ; 
+        }
+        case VARIABLE: 
+        { 
+            //could add support for multiple variables, idk why though 
+            return z; 
+        } 
+        default: 
+            fprintf(stderr, "term of noninitialized type . Aborting. \n" ) ; 
+            exit(3) ; 
+    }
+}
+////////////////////////////////////////////////
+////////////////END EVAL ///////////////////////
+///////////////////////////////////////////////
+
+
+///////////////////////////////////////////////
+//////// ALLOC / FREE ////////////////////////
+//////////////////////////////////////////////
 
 // allocate and free
-expression_t *new_expression(void) ; 
-void free_expression(expression_t *e) ; 
+expression_t *new_expression(void) { 
+    expression_t *result =(expression_t*) malloc(sizeof(expression_t) ) ; 
+    if(result == NULL ) { fprintf(stderr, "Mem Error allocating expression\n" ) ; exit(4); } 
 
-term_t new_term(void); 
-void free_term(term_t *t) ; 
+    result->type = UNDEFINED; 
+    return result; 
+} 
+void free_expression(expression_t *expr) { 
+  switch(expr->type) { 
+        case TERM: 
+        { 
+            free_term(expr->data.term); 
+            break; 
+        }
+        case PLUS: 
+        { 
+            free_expression(expr->data.plus.expression) ;
+            free_term(expr->data.plus.term); 
+            break; 
+        } 
+        case MINUS:  
+        { 
+            free_expression(expr->data.minus.expression) ;
+            free_term(expr->data.minus.term); 
+            break; 
+        }
+        default: 
+            break;
+    }
+  free((void*) expr) ; 
+}
 
-factor_t new_factor(void); 
-void free_factor(factor_t *f) ; 
+term_t *new_term(void){ 
+    term_t *result = (term_t*) malloc(sizeof(term_t)) ; 
+    if(result == NULL ) { fprintf(stderr, "Mem Error allocating term\n" ) ; exit(4); } 
+    
+    result->type = UNDEFINED; 
+    return result; 
+}    
+void free_term(term_t *term) { 
+    switch(term->type) { 
+        case FACTOR: 
+        { 
+            free_factor(term->data.factor); 
+            break; 
+        }
+        case TIMES: 
+        { 
+            free_term(term->data.times.term) ;
+            free_factor(term->data.times.factor); 
+            break; 
+        } 
+        case DIVIDED_BY:  
+        { 
+            free_term(term->data.divided_by.term) ;
+            free_factor(term->data.divided_by.factor); 
+            break; 
+        }
+        default: 
+            break;
+    }
+  free((void*) term) ; 
+}
 
-exponential_t new_exponential(void); 
-void free_exponential(exponential_t *e) ; 
-*/
+factor_t *new_factor(void) { 
+    factor_t *result = (factor_t*) malloc(sizeof(factor_t) ) ; 
+    if(result == NULL ) { fprintf(stderr, "Mem Error allocating factor\n" ) ; exit(4); } 
+
+    result->type = UNDEFINED; 
+    return result; 
+} 
+void free_factor(factor_t *factor) { 
+    switch(factor->type) { 
+        case EXPONENTIAL: 
+        { 
+            free_exponential(factor->data.exponential) ; 
+            break;
+        }
+        case RAISED_TO: 
+        {   
+            free_exponential(factor->data.raised_to.base); 
+            free_exponential(factor->data.raised_to.pow); 
+            break; 
+        } 
+        default: 
+            break; 
+    } 
+    free((void*) factor); 
+}
+
+exponential_t *new_exponential(void) { 
+    exponential_t *result = (exponential_t*) malloc(sizeof(exponential_t)) ; 
+    if(result == NULL ) { fprintf(stderr, "Mem Error allocating factor\n" ) ; exit(4); } 
+
+    result->type  = UNDEFINED; 
+
+    return result; 
+} 
+
+void free_exponential(exponential_t *e) { 
+    if (e->type == EXPRESSION ) { 
+        free_expression(e->data.expression) ; 
+    }
+    free((void* ) e) ; 
+} 
+///////////////////////////////////////////////////////
+//////////////// END ALLOC ///////////////////////////
+/////////////////////////////////////////////////////
+
+
+/////// ERROR HANDLING ////////
+void type_error(char *expected_name , int expected_value, int actual_value ) { 
+    fprintf(stderr, "TypeMisMatch: Expected %s(%d) got %d instead. Aborted\n" , expected_name, expected_value, actual_value ); 
+    exit(2) ; 
+}
 
