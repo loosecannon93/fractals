@@ -81,7 +81,7 @@ void exponential_set_variable( exponential_t *e , const char name, complex value
 void exponential_set_expresion( exponential_t *e , expression_t *expr ) ; 
 
 // getters, check the type and Exit if we do anything with the wrong type 
-void *expression_get_term(expression_t *e) ;
+term_t *expression_get_term(expression_t *e) ;
 struct plus *expression_get_plus(expression_t *e); 
 struct minus *expression_get_minus(expression_t *e);
 
@@ -92,28 +92,29 @@ struct divided_by *term_get_divided_by(term_t *t );
 exponential_t *factor_get_exponential(factor_t *f ) ;
 struct raised_to *factor_get_raised_to(factor_t *f ) ; 
 
-complex *exponential_get_number( exponential_t *e  ) ; 
+complex exponential_get_number( exponential_t *e  ) ; 
 struct variable *exponential_get_variable( exponential_t *e ) ; 
 expression_t *exponential_get_expresion( exponential_t *e ) ; 
 
 
 // evaluate our exquation 
-complex eval_exponential( exponential_t exp, complex z ); 
-complex eval_factor( factor_t factor , complex z ) ; 
-complex eval_term( term_t term, complex z ) ; 
-complex eval_expression( expression_t expr, complex z ); 
+complex eval_exponential( exponential_t *exp, complex z ); 
+complex eval_factor( factor_t *factor , complex z ) ; 
+complex eval_term( term_t *term, complex z ) ; 
+complex eval_expression( expression_t *expr, complex z ); 
 
 // allocate and free
 expression_t *new_expression(void) ; 
 void free_expression(expression_t *e) ; 
 
-term_t new_term(void); 
+term_t *new_term(void); 
 void free_term(term_t *t) ; 
 
-factor_t new_factor(void); 
+factor_t *new_factor(void); 
 void free_factor(factor_t *f) ; 
 
-exponential_t new_exponential(void); 
+exponential_t *new_exponential(void); 
 void free_exponential(exponential_t *e) ; 
 
 
+void type_error(char *expected_name, int expected_value, int actual_value ) ; 
