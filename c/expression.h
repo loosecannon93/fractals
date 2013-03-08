@@ -5,7 +5,7 @@
 
 struct expression_t; typedef struct expression_t expression_t; 
 struct term_t;  typedef struct term_t term_t; 
- struct factor_t ;typedef struct factor_t factor_t; 
+struct factor_t ;typedef struct factor_t factor_t; 
 struct exponential_t; typedef struct exponential_t exponential_t; 
 
 enum EXP_TYPE { TERM, PLUS, MINUS , // expression types 
