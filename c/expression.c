@@ -511,6 +511,7 @@ void print_exponential(exponential_t *exp) {
             printf("?exponential type unknown?" ) ; 
             break;
     }
+    printf("("); 
 } 
 
 
