@@ -23,7 +23,7 @@ extern expression_list *expressions;
     complex num; 
 } 
 
-%token RAISED_TO_TOK PLUS_TOK MINUS_TOK TIMES_TOK DIVIDED_BY_TOK Z_TOK OPEN_PAREN_TOK CLOSE_PAREN_TOK ERROR_TOK EOLN_TOK EOF_TOK 
+%token RAISED_TO_TOK PLUS_TOK MINUS_TOK TIMES_TOK DIVIDED_BY_TOK Z_TOK OPEN_PAREN_TOK CLOSE_PAREN_TOK COMMENT_TOK ERROR_TOK EOLN_TOK EOF_TOK 
 %token<num> NUMBER_TOK J_TOK
 %type<expr>  expression 
 %type<term> term 
@@ -47,6 +47,7 @@ line
     : expression EOLN_TOK           { 
         expression_list_push(expressions , $1 ) ;      
     } 
+    | COMMENT_TOK
     | ERROR_TOK EOLN_TOK                { printf("error\n"); } 
     | EOLN_TOK                      
     ;
