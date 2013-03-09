@@ -1,7 +1,17 @@
 #!/bin/bash 
 
-for file in `find -name '*.ppm'`
+for ppmname in `find -name '*.ppm'`
 do 
-name=`basename $file  .ppm` 
-convert $name.ppm $name.png && rm $name.ppm 
+echo $ppmname
+name=$(basename $ppmname .ppm) 
+echo "$name"
+pngname="$name.png" 
+
+if [[ ! -f $pngname ]] ; then 
+
+    echo converting "$ppmname" to "$pngname" 
+    convert "$ppmname" "$pngname" 
+else 
+    echo skipping $ppmname beacuse $pngname already exists 
+fi 
 done 
