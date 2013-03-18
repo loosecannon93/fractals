@@ -103,6 +103,11 @@ factor
     ;
 exponential
     : number                   
+    | trig_function { 
+        exponential_t *trig = new_exponential(); 
+        exponential_set_trig(trig,$1) ; 
+        $$ = trig; 
+    }
     | Z_TOK { 
         exponential_t *var = new_exponential(); 
         exponential_set_variable(var,'z'); 
