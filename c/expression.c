@@ -434,10 +434,30 @@ exponential_t *new_exponential(void) {
 } 
 
 void free_exponential(exponential_t *e) { 
-    if (e->type == EXPRESSION ) { 
-        free_expression(e->data.expression) ; 
+    switch(e->type) { 
+        case EXPRESSION:
+            free_expression(e->data.expression) ; 
+            break;
+        case TRIG: 
+            free_trig(e->data.trig) ; 
+            break;
     }
     free((void* ) e) ; 
+} 
+
+trig_t *new_trig(void) { 
+    trig_t *result = (trig_t*) malloc(sizeof(trig_t) ) ; 
+    if(result == NULL ) { fprintf(stderr, "Mem Error allocating trig_t\n" ) ; exit(4); } 
+
+    result->type  = UNDEFINED; 
+
+    return result; 
+} 
+void free_trig(trig_t *t) { 
+    if (t->type != UNDEFINED ) {
+        free_expression(t->data.sin) ; //this will catch all of them, the other code should be simpler 
+    } 
+    free((void*) t) ; 
 } 
 
 expression_list *new_expression_list(void) { 

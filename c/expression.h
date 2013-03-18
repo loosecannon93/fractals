@@ -160,6 +160,9 @@ void free_factor(factor_t *f) ;
 exponential_t *new_exponential(void); 
 void free_exponential(exponential_t *e) ; 
 
+trig_t *new_trig(void); 
+void free_trig(trig_t *t);
+
 expression_list_node *new_expression_list_node(void); 
 // freed by overlaying list 
 
