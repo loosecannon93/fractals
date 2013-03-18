@@ -180,5 +180,5 @@ void print_expression(expression_t *expression, FILE *out);
 void print_term(term_t *term, FILE *out);
 void print_factor(factor_t *factor, FILE *out);
 void print_exponential(exponential_t *exponential, FILE *out);
-
+void print_trig(trig_t *trig, FILE *out); 
 #endif // EXPRESSION_H 

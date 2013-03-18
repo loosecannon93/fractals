@@ -616,12 +616,17 @@ void print_exponential(exponential_t *exp, FILE *out ) {
         case EXPRESSION: 
             print_expression(exponential_get_expression(exp),out) ; 
             break; 
+        case TRIG: 
+            print_trig(exponential_get_trig(exp), out); 
+            break;
         default:
             fprintf(out,"?exponential type unknown?" ) ; 
             break;
     }
 } 
-
+void print_trig(trig_t *t , FILE *out) { 
+        fprintf(out,"trig function"); 
+}
 
 
 
