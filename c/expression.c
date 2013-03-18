@@ -277,8 +277,50 @@ complex eval_exponential( exponential_t *exp, complex z ){
             expression_t *expression = exponential_get_expression(exp); 
             return eval_expression(expression, z) ;
         } 
+        case TRIG: 
+        { 
+            trig_t *trig = exponential_get_trig(exp); 
+            return eval_trig(trig, z ) ; 
+        }
         default: 
             fprintf(stderr, "exponential of noninitialized type . Aborting. \n" ) ; 
+            exit(3) ; 
+    }
+}
+complex eval_trig(trig_t *func, complex z) { 
+    switch(func->type) { 
+        case SIN: 
+        { 
+            expression_t *arg = trig_get_sin(func ); 
+            return csin(eval_expression(arg,z)); 
+        } 
+        case COS: 
+        { 
+            expression_t *arg = trig_get_cos(func ); 
+            return ccos(eval_expression(arg,z)); 
+        } 
+        case SINH: 
+        { 
+            expression_t *arg = trig_get_sinh(func ); 
+            return csinh(eval_expression(arg,z)); 
+        } 
+        case COSH: 
+        { 
+            expression_t *arg = trig_get_cosh(func ); 
+            return ccosh(eval_expression(arg,z)); 
+        } 
+        case LOG: 
+        { 
+            expression_t *arg = trig_get_log(func ); 
+            return clog(eval_expression(arg,z)); 
+        } 
+        case EXP: 
+        { 
+            expression_t *arg = trig_get_exp(func ); 
+            return cexp(eval_expression(arg,z)); 
+        } 
+        default: 
+            fprintf(stderr, "trig/exp of noninitialized type . Aborting. \n" ) ; 
             exit(3) ; 
     }
 }

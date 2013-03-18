@@ -145,6 +145,7 @@ complex eval_exponential( exponential_t *exp, complex z );
 complex eval_factor( factor_t *factor , complex z ) ; 
 complex eval_term( term_t *term, complex z ) ; 
 complex eval_expression( expression_t *expr, complex z ); 
+complex eval_trig( trig_t *function, complex z ) ; 
 
 // allocate and free
 expression_t *new_expression(void) ; 
