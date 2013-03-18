@@ -2,7 +2,7 @@ CC=gcc
 LDFLAGS= -lm
 YACC=bison 
 LEX=flex
-CFLAGS= -std=c99 -D_GNU_SOURCE -g 
+CFLAGS= -std=c99 -D_GNU_SOURCE -O3 
 YFLAGS= -d 
 EXEC=newt
 OBJ=newt.o expression_parse.tab.o expression.o lex.yy.o 
