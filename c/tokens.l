@@ -15,6 +15,13 @@ int yyparse();
 
 %%
 
+sin                                   { return SIN_TOK; } 
+cos                                   { return COS_TOK; } 
+sinh                                  { return SINH_TOK; }
+cosh                                  { return COSH_TOK ; } 
+log                                   { return LOG_TOK; } 
+exp                                   { return EXP_TOK; } 
+
 z|Z                                   {   return Z_TOK;            } 
 
 i|I                                   {  return J_TOK; } 
