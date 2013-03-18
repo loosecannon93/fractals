@@ -19,7 +19,7 @@ extern FILE *yyin;
 
 void drawFractal(char *filename , expression_t * expr) ; 
 
-const int WIDTH = 2000, HEIGHT = 2000; // actual image size in pixels 
+const int WIDTH = 4000, HEIGHT = 4000; // actual image size in pixels 
 
 // we have to map WIDTH and HEIGHT to a nomralized domain 
 const double SCALED_X_MAX = 1.0;
