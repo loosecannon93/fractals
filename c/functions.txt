@@ -2,6 +2,11 @@
 #sin(z)
 #cos(z) 
 #cos(z^2)^2
+cosh(z^2)^2
+sin(z^3)^2
+sin(z^2-1)
+sin(100*z)
+sin(z)/z 
 #cosh(z) 
 #exp(z)-z
 #exp(z^2)+z^3-z 
