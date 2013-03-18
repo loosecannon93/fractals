@@ -6,7 +6,8 @@
 struct expression_t; typedef struct expression_t expression_t; 
 struct term_t;  typedef struct term_t term_t; 
 struct factor_t ;typedef struct factor_t factor_t; 
-struct exponential_t; typedef struct exponential_t exponential_t; 
+struct exponential_t; typedef struct exponential_t exponential_t;
+struct trig_t;      typedef struct trig_t trig_t; 
 
 enum EXP_TYPE { TERM, PLUS, MINUS , // expression types 
                 FACTOR, TIMES, DIVIDED_BY ,  //term types
@@ -62,8 +63,22 @@ typedef struct exponential_t {
         complex number;
         char variable;  
         expression_t *expression; 
+        trig_t  *trig;
     } data; 
 } exponential_t;
+
+typedef struct trig_t { 
+    enum EXP_TYPE type; 
+    union { 
+        expression_t *sin; 
+        expression_t *cos; 
+        expression_t *sinh; 
+        expression_t *cosh; 
+        expression_t *exp; 
+        expression_t *log;
+    } data; 
+} trig_t; 
+
 
 //linked list of exprssions 
 typedef struct expression_list_node { 
