@@ -102,6 +102,7 @@ void drawFractal(char *filename, expression_t *expr) {
        fprintf(image, "\n") ; 
     }
     fclose(image) ; 
+    loadBar(1,1,1,winsize.ws_col);
     fprintf(stderr, "\n"); 
 } 
 
