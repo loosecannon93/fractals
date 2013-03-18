@@ -53,7 +53,6 @@ int main(int argc, char **argv) {
         char *filename; 
         asprintf(&filename,"img/fractal-%s.ppm", template) ; 
         puts(filename) ; 
-        puts("" );
         drawFractal(filename, expression) ;
         free((void*) filename) ;
         free_expression(expression); 
@@ -103,6 +102,7 @@ void drawFractal(char *filename, expression_t *expr) {
        fprintf(image, "\n") ; 
     }
     fclose(image) ; 
+    fprintf(stderr, "\n"); 
 } 
 
 // x / n iters complete, r resolution, w width
