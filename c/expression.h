@@ -105,6 +105,15 @@ void factor_set_raised_to(factor_t *f, exponential_t *base, exponential_t *power
 void exponential_set_number( exponential_t *e , complex abi ) ; 
 void exponential_set_variable( exponential_t *e , const char name/*, complex value*/ ) ; 
 void exponential_set_expression( exponential_t *e , expression_t *expr ) ; 
+void exponential_set_trig(exponential_t *e , trig_t *func) ; 
+
+void trig_set_sin(trig_t *t, expression_t *argument ) ; 
+void trig_set_cos(trig_t *t, expression_t *argument ) ; 
+void trig_set_sinh(trig_t *t, expression_t *argument ) ; 
+void trig_set_cosh(trig_t *t, expression_t *argument ) ; 
+void trig_set_log(trig_t *t, expression_t *argument ) ; 
+void trig_set_exp(trig_t *t, expression_t *argument ) ; 
+
 
 // getters, check the type and Exit if we do anything with the wrong type 
 term_t *expression_get_term(expression_t *e) ;

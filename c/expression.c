@@ -64,6 +64,37 @@ void exponential_set_expression( exponential_t *e , expression_t *expr ) {
     e->type = EXPRESSION; 
     e->data.expression = expr; 
 } 
+void exponential_set_trig(exponential_t *e, trig_t *func ) { 
+    e->type = TRIG ; 
+    e->data.trig = func ; 
+} 
+
+//trig setters
+void trig_set_sin(trig_t *t, expression_t *arg) { 
+    t->type = SIN; 
+    t->data.sin = arg; 
+}
+void trig_set_cos(trig_t *t, expression_t *arg) { 
+    t->type = COS; 
+    t->data.cos = arg; 
+}
+void trig_set_sinh(trig_t *t, expression_t *arg) { 
+    t->type = SINH; 
+    t->data.sinh = arg; 
+}
+void trig_set_cosh(trig_t *t, expression_t *arg) { 
+    t->type = COSH; 
+    t->data.cosh = arg; 
+}
+void trig_set_exp(trig_t *t, expression_t *arg) { 
+    t->type = EXP; 
+    t->data.exp = arg; 
+}
+void trig_set_log(trig_t *t, expression_t *arg) { 
+    t->type = LOG; 
+    t->data.log = arg; 
+}
+
 ///////////////////////////////////////////////////////////
 ///////////// END SETTERS /////////////////////////////////
 //////////////////////////////////////////////////////////
