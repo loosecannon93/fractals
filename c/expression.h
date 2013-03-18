@@ -12,7 +12,8 @@ struct trig_t;      typedef struct trig_t trig_t;
 enum EXP_TYPE { TERM, PLUS, MINUS , // expression types 
                 FACTOR, TIMES, DIVIDED_BY ,  //term types
                 EXPONENTIAL , RAISED_TO , // facor types 
-                NUMBER, VARIABLE, EXPRESSION, // exponential types  
+                NUMBER, VARIABLE, EXPRESSION, TRIG ,// exponential types  
+                SIN, COS, SINH, COSH, EXP, LOG, 
                 UNDEFINED } ; //type not yet set 
 
 
