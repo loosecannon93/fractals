@@ -114,6 +114,38 @@ exponential
         $$ = exp; 
     } 
     ;
+trig_function
+    : COS_TOK OPEN_PAREN_TOK expression CLOSE_PAREN_TOK { 
+        trig_t *func = new_trig(); 
+        trig_set_cos(func, $3);
+        $$ = func; 
+    } 
+    | SIN_TOK OPEN_PAREN_TOK expression CLOSE_PAREN_TOK  { 
+        trig_t *func = new_trig(); 
+        trig_set_sin(func, $3);
+        $$ = func; 
+    }
+    | SINH_TOK OPEN_PAREN_TOK expression CLOSE_PAREN_TOK  { 
+        trig_t *func = new_trig(); 
+        trig_set_sinh(func, $3);
+        $$ = func; 
+    }
+    | COSH_TOK OPEN_PAREN_TOK expression CLOSE_PAREN_TOK  { 
+        trig_t *func = new_trig(); 
+        trig_set_cosh(func, $3);
+        $$ = func; 
+    }
+    | LOG_TOK OPEN_PAREN_TOK expression CLOSE_PAREN_TOK  { 
+        trig_t *func = new_trig(); 
+        trig_set_log(func, $3);
+        $$ = func; 
+    }
+    | EXP_TOK OPEN_PAREN_TOK expression CLOSE_PAREN_TOK  { 
+        trig_t *func = new_trig(); 
+        trig_set_exp(func, $3);
+        $$ = func; 
+    }
+    ;
 number
     : NUMBER_TOK                     { 
         exponential_t *num = new_exponential(); 
