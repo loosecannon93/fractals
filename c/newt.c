@@ -126,7 +126,7 @@ static inline void loadBar(int x, int n, int r, int width)
     for (int x=0; x<c; x++)
     fprintf(stderr, "=");
 
-    for (int x=c; x<w; x++)
+    for (int x=c; x<w-1; x++)
     fprintf(stderr, " ");
 
     // ANSI Control codes to go back to the
