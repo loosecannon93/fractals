@@ -156,6 +156,38 @@ expression_t *exponential_get_expression( exponential_t *e ) {
     if ( e->type != EXPRESSION ) {  type_error("EXPRESSION", EXPRESSION, e->type ) ; } 
     return (e->data.expression ) ; 
 } 
+trig_t *exponential_get_trig(exponential_t *e ) { 
+    if ( e->type != TRIG ) {  type_error("TRIG", TRIG, e->type ) ; } 
+    return (e->data.trig ) ; 
+} 
+
+
+//trig
+expression_t *trig_get_sin( trig_t *t ) {
+    if ( t->type != SIN  ) {  type_error("SIN", SIN, t->type ) ; } 
+    return (t->data.sin ) ; 
+} 
+expression_t *trig_get_cos( trig_t *t ) {
+    if ( t->type != COS  ) {  type_error("COS", COS, t->type ) ; } 
+    return (t->data.cos ) ; 
+} 
+expression_t *trig_get_sinh( trig_t *t ) {
+    if ( t->type != SINH  ) {  type_error("SINH", SINH, t->type ) ; } 
+    return (t->data.sinh ) ; 
+} 
+expression_t *trig_get_cosh( trig_t *t ) {
+    if ( t->type != COSH  ) {  type_error("COSH", COSH, t->type ) ; } 
+    return (t->data.cosh ) ; 
+} 
+expression_t *trig_get_log( trig_t *t ) {
+    if ( t->type != LOG  ) {  type_error("LOG", LOG, t->type ) ; } 
+    return (t->data.log ) ; 
+} 
+expression_t *trig_get_exp( trig_t *t ) {
+    if ( t->type != EXP  ) {  type_error("EXP", EXP, t->type ) ; } 
+    return (t->data.exp ) ; 
+} 
+
 //////////////////////////////////////////////////////////////////////////////////////
 /////////////////END GETTERS /////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////

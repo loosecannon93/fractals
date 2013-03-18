@@ -130,6 +130,14 @@ struct raised_to *factor_get_raised_to(factor_t *f ) ;
 complex exponential_get_number( exponential_t *e  ) ; 
 char exponential_get_variable( exponential_t *e ) ; 
 expression_t *exponential_get_expression( exponential_t *e ) ; 
+trig_t *exponential_get_trig( exponential_t *e ) ; 
+
+expression_t *trig_get_sin(trig_t *t) ;
+expression_t *trig_get_cos(trig_t *t) ;
+expression_t *trig_get_sinh(trig_t *t) ;
+expression_t *trig_get_cosh(trig_t *t) ;
+expression_t *trig_get_exp(trig_t *t) ;
+expression_t *trig_get_log(trig_t *t) ;
 
 
 // evaluate our exquation 
