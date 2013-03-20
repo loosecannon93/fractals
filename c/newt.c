@@ -96,10 +96,13 @@ void drawFractal(char *filename, expression_t *expr) {
                 iteration++;
             }
             z *= WIDTH/2;
-            int red = ((int) creal(z) + WIDTH/2 ) % 255;
-            int green = ((int) cimag(z) + WIDTH/2 ) % 255; 
-            int blue = ((int) (WIDTH*((M_PI+carg(z))/(2*M_PI)))) % 255;
-            fprintf(image,"%3d %3d %3d ",red,green,blue);
+            int red = ((int) creal(z) + WIDTH/2+1 ) % 128;
+            int green = ((int) cimag(z) + WIDTH/2+1 ) % 128; 
+            int blue = ((int) (WIDTH*((M_PI+carg(z))/(2*M_PI)))) % 128;
+//          int shading =(int)( ((float)iteration / 200.0)*32.0 );
+//          int shading =( iteration % 4 *32 + iteration % 8 * 16 + iteration % 16 * 8 ) /3;
+            int shading = iteration % 32 * 4 ;
+            fprintf(image,"%3d %3d %3d ",red + shading ,green + shading ,blue +shading );
         }
        fprintf(image, "\n") ; 
     }
