@@ -98,7 +98,7 @@ void drawFractal(char *filename, expression_t *expr) {
             z *= WIDTH/2;
             int red = ((int) creal(z) + WIDTH/2 ) % 255;
             int green = ((int) cimag(z) + WIDTH/2 ) % 255; 
-            int blue = ((int) cabs(z) ) % 255;
+            int blue = ((int) (WIDTH*((M_PI+carg(z))/(2*M_PI)))) % 255;
             fprintf(image,"%3d %3d %3d ",red,green,blue);
         }
        fprintf(image, "\n") ; 
