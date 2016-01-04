@@ -1,5 +1,8 @@
 Newtown fractals
 ========
+
+See [This slideshow](https://docs.google.com/presentation/d/1Tsx3DGGPp3mlM489RzXlOVKxjVE2h6XR21Qs02qTk6Q/edit?usp=sharing) for a more detailed description of this project. 
+
 Generates newtown fractals from compelx equations. 
 
 Only the C implementations is fleshed out
